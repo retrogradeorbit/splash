@@ -4,7 +4,7 @@ My small demo-scene-esque splash page. Test out using infinitelives.pixi with fi
 
 ## Overview
 
-FIXME: Write a paragraph about the library/project and highlight its goals.
+My websites splash page. Idea is to make it a homage to 8-bit demoscene.
 
 ## Setup
 
