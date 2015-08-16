@@ -1,5 +1,5 @@
 (ns ^:figwheel-always splash.core
-    (:require))
+    (:require [infinitelives.pixi.canvas :as canv]))
 
 (enable-console-print!)
 
@@ -9,10 +9,17 @@
 
 (defonce app-state (atom {:text "Hello world!"}))
 
+(defonce canvas
+  (canv/init
+   {:expand true
+    :engine :auto
+    :layers [:stars]
+    :background 0x505050}))
+
+
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
 )
-
