@@ -9,7 +9,6 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
 
                  ;; add infinite lives deps
-                 [infinitelives.utils/infinitelives.utils "0.1.0-SNAPSHOT"]
                  [infinitelives.pixi/infinitelives.pixi "0.1.0-SNAPSHOT"]
                  ]
 
