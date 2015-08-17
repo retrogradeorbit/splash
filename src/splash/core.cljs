@@ -1,5 +1,14 @@
 (ns ^:figwheel-always splash.core
-    (:require [infinitelives.pixi.canvas :as canv]))
+    (:require [infinitelives.pixi.canvas :as canv]
+              [infinitelives.pixi.resources :as resources]
+              [infinitelives.pixi.sprite :as sprite]
+              [infinitelives.utils.events :as events]
+              [infinitelives.utils.console :refer [log]]
+              ;[splash.macros :refer-macros [ignore]]
+              [cljs.core.async :refer [<!]])
+    (:require-macros [cljs.core.async.macros :refer [go]]
+                     [splash.macros :as macros]
+                     ))
 
 (enable-console-print!)
 
