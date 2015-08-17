@@ -36,3 +36,42 @@
   ;; your application
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
 )
+
+(defn main []
+  (go
+    (<! (resources/load-resources
+         (-> canvas :layer :ui)
+         [
+          "img/stars.png"
+          "http://www.goodboydigital.com/pixijs/examples/1/bunny.png"
+          ]
+         :full-colour 0x302060
+         :highlight 0x8080ff
+         :lowlight 0x101030
+         :empty-colour 0x202020
+         :debug-delay 0.2
+         :width 400
+         :height 32
+         :fade-in 0.2
+         :fade-out 0.5))
+
+
+
+    (macros/with-sprite canvas :stars
+      [spr (sprite/make-sprite
+            (resources/get-texture :stars :nearest)
+            :scale [8 8]
+            :alpha 0.1)]
+
+      (<! (events/wait-time 2000)))
+
+    #_ (macros/on-layer (-> canvas :layer :stars)
+                        [spr (sprite/make-sprite
+                              (resources/get-texture :stars :nearest)
+                              :scale [8 8])]
+                        (<! (events/wait-time 2000)))
+
+    ))
+
+
+(main)
