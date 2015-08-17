@@ -26,6 +26,10 @@
     :background 0x505050}))
 
 
+(defonce render-go-block (go (while true
+               (<! (events/next-frame))
+               ;(log "frame")
+               ((:render-fn canvas)))))
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
