@@ -32,6 +32,7 @@
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
 )
 
+
 (defn main []
   (go
     (<! (resources/load-resources
@@ -49,6 +50,22 @@
          :height 32
          :fade-in 0.2
          :fade-out 0.5))
+
+    (let [scale [4 4]
+          text (resources/get-texture :stars :nearest)
+          stars (for [[x y] [[0 0] [8 0] [16 0] ;[24 0]
+                             [0 8] [8 8] [16 8]
+                             [0 16] [8 16] [24 24]]]
+                  (texture/sub-texture text
+                                        [x y] [8 8]))
+          star-spr (for [z (range (count stars)) n (range 50)]
+                     (sprite/make-sprite
+                      (nth stars z)
+                      :x (* 4 (math/rand-between -100 100))
+                      :y (* 4 (math/rand-between -100 100))
+                      :scale scale :alpha 1.0))
+          ]
+      (doseq [s star-spr] (.addChild (-> canvas :layer :stars) s)))
 
     (macros/with-sprite canvas :stars
       [spr (sprite/make-sprite
