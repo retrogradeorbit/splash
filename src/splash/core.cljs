@@ -48,23 +48,13 @@
          :fade-in 0.2
          :fade-out 0.5))
 
-
-
     (macros/with-sprite canvas :stars
       [spr (sprite/make-sprite
             (resources/get-texture :stars :nearest)
             :scale [8 8]
             :alpha 0.1)]
 
-      (<! (events/wait-time 2000)))
-
-    #_ (macros/on-layer (-> canvas :layer :stars)
-                        [spr (sprite/make-sprite
-                              (resources/get-texture :stars :nearest)
-                              :scale [8 8])]
-                        (<! (events/wait-time 2000)))
-
-    ))
+      (<! (events/wait-time 2000)))))
 
 
 (main)
