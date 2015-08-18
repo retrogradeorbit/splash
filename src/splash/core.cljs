@@ -4,6 +4,8 @@
               [infinitelives.pixi.sprite :as sprite]
               [infinitelives.utils.events :as events]
               [infinitelives.utils.console :refer [log]]
+              [infinitelives.pixi.texture :as texture]
+              [infinitelives.utils.math :as math]
               ;[splash.macros :refer-macros [ignore]]
               [cljs.core.async :refer [<!]])
     (:require-macros [cljs.core.async.macros :refer [go]]
@@ -50,11 +52,18 @@
 
     (macros/with-sprite canvas :stars
       [spr (sprite/make-sprite
-            (resources/get-texture :stars :nearest)
-            :scale [8 8]
-            :alpha 0.1)]
 
-      (<! (events/wait-time 2000)))))
+            (texture/sub-texture
+             (resources/get-texture :stars :nearest)
+             [0 0] [8 8]
+             )
+            :scale [4 4]
+            :alpha 0.0)]
+
+      (<! (resources/fadein spr :duration 0.5))
+      (<! (events/wait-time 2000))
+      (<! (resources/fadeout spr :duration 0.5))
+      )))
 
 
 (main)
