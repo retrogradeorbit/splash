@@ -9,6 +9,9 @@
         (when more
           (list* `assert-args more)))))
 
+(defmacro get-layer [canvas layer]
+  `(-> ~canvas :layer ~layer))
+
 (defmacro with-sprite [canvas layer bindings & body]
   (assert-args
    (vector? bindings) "a vector for its binding"
@@ -17,10 +20,10 @@
   (if (pos? (count bindings))
     (let [symb (first bindings) val (second bindings)]
       `(let [~symb ~val]
-         (.addChild (-> ~canvas :layer ~layer) ~symb)
+         (.addChild (get-layer ~canvas ~layer) ~symb)
          (with-sprites ~canvas ~layer ~(subvec bindings 2) ~@body)
-         (.removeChild (-> ~canvas :layer ~layer) ~symb)))
+         (.removeChild (get-layer ~canvas ~layer) ~symb)))
     `(do ~@body)))
 
 
-(macroexpand '(with-sprites canv lay [] (do1) (do2)))
+(macroexpand '(with-sprites canv lay [a aaa] (do1) (do2)))
