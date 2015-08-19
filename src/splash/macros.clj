@@ -1,25 +1,26 @@
 (ns splash.macros)
 
-;(def ^:dynamic *canvas* nil)
-;(def ^:dynamic *layer* nil)
+(defmacro ^:private assert-args
+  [& pairs]
+  `(do (when-not ~(first pairs)
+         (throw (IllegalArgumentException.
+                  (str (first ~'&form) " requires " ~(second pairs) " in " ~'*ns* ":" (:line (meta ~'&form))))))
+     ~(let [more (nnext pairs)]
+        (when more
+          (list* `assert-args more)))))
 
-(defmacro ignore [& body]
-  '())
+(defmacro with-sprite [canvas layer bindings & body]
+  (assert-args
+   (vector? bindings) "a vector for its binding"
+   (even? (count bindings)) "an even number of forms in binding vector")
+
+  (if (pos? (count bindings))
+    (let [symb (first bindings) val (second bindings)]
+      `(let [~symb ~val]
+         (.addChild (-> ~canvas :layer ~layer) ~symb)
+         (with-sprites ~canvas ~layer ~(subvec bindings 2) ~@body)
+         (.removeChild (-> ~canvas :layer ~layer) ~symb)))
+    `(do ~@body)))
 
 
-(defmacro with-sprite [canvas layer [symb bind] & body]
-  `(let [~symb ~bind]
-     (.addChild (-> ~canvas :layer ~layer) ~symb)
-     (do ~@body)
-     (.removeChild (-> ~canvas :layer ~layer) ~symb)))
-
-;; todo: reqrite these two macros recursively
-(defmacro with-sprites [canvas layer binds & body]
-  (let [symbols (map first (partition 2 binds))]
-    (list 'let binds
-          (concat (map (fn [symb] `(.addChild (-> ~canvas :layer ~layer) ~symb)) symbols)
-                  [(cons 'do body)]
-                  (map (fn [symb] `(.removeChild (-> ~canvas :layer ~layer) ~symb)) (reverse symbols))))))
-
-
-(macroexpand '(with-sprites canv lay [a my-a b my-b] (do1) (do2)))
+(macroexpand '(with-sprites canv lay [] (do1) (do2)))
