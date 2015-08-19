@@ -4,10 +4,10 @@
   [& pairs]
   `(do (when-not ~(first pairs)
          (throw (IllegalArgumentException.
-                  (str (first ~'&form) " requires " ~(second pairs) " in " ~'*ns* ":" (:line (meta ~'&form))))))
-     ~(let [more (nnext pairs)]
-        (when more
-          (list* `assert-args more)))))
+                 (str (first ~'&form) " requires " ~(second pairs) " in " ~'*ns* ":" (:line (meta ~'&form))))))
+       ~(let [more (nnext pairs)]
+          (when more
+            (list* `assert-args more)))))
 
 (defmacro get-layer [canvas layer]
   `(-> ~canvas :layer ~layer))
