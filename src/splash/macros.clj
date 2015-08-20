@@ -21,7 +21,7 @@
     (let [symb (first bindings) val (second bindings)]
       `(let [~symb ~val]
          (.addChild (get-layer ~canvas ~layer) ~symb)
-         (with-sprites ~canvas ~layer ~(subvec bindings 2) ~@body)
+         (with-sprite ~canvas ~layer ~(subvec bindings 2) ~@body)
          (.removeChild (get-layer ~canvas ~layer) ~symb)))
     `(do ~@body)))
 
