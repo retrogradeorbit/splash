@@ -33,7 +33,7 @@
 )
 
 
-(def num-stars 50)
+(def num-stars 500)
 (def stars-set (map (fn [n]
                       (let [depth (math/rand-between 0 8)]
                         {:x (math/rand-between 0 400)
@@ -66,19 +66,39 @@
                              [0 16] [8 16] [24 24]]]
                   (texture/sub-texture text
                                         [x y] [8 8]))
-          star-spr (for [z (range (count stars)) n (range 50)]
-                     (sprite/make-sprite
-                      (nth stars z)
-                      :x (* 4 (math/rand-between -200 200))
-                      :y (* 4 (math/rand-between -150 150))
-                      :scale scale
-                      :alpha 0.0))]
+          star-spr (for [{:keys [x y z depth]} stars-set]
+                      (sprite/make-sprite
+                         (nth stars depth)
+                         :x (* 4 x)
+                         :y (* 4 y)
+                         :scale scale
+                         :alpha 0.0))]
       (macros/with-sprite-set canvas :stars
         [sprs star-spr]
         (doseq [s sprs] (resources/fadein s :duration 1.5))
+
+        (go (loop [n 1000 sts stars-set]
+              (when (pos? n)
+                (<! (events/next-frame))
+
+                (recur (dec n)
+                       (doall (map
+                               (fn [{:keys [x y z] :as old} sprite]
+                                 (sprite/set-pos! sprite
+                                                  (* 4 (- (mod (- x z) 400) 200))
+                                                  (* 4 (- y 150)))
+                                        ;(println old sprite)
+                                 (assoc old :x (- x z)))
+                               sts
+                               star-spr))
+                       ))))
+
+
         (<! (events/wait-time 2000))
-        (doseq [s sprs] (resources/fadeout s :duration 1.5))
-        (<! (events/wait-time 1500))))
+
+
+        (doseq [s sprs] (resources/fadeout s :duration 10))
+        (<! (events/wait-time 15000))))
 
     (macros/with-sprite canvas :stars
       [spr (sprite/make-sprite
