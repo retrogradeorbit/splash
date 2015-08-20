@@ -61,26 +61,30 @@
           star-spr (for [z (range (count stars)) n (range 50)]
                      (sprite/make-sprite
                       (nth stars z)
-                      :x (* 4 (math/rand-between -100 100))
-                      :y (* 4 (math/rand-between -100 100))
-                      :scale scale :alpha 1.0))
-          ]
-      (doseq [s star-spr] (.addChild (-> canvas :layer :stars) s)))
+                      :x (* 4 (math/rand-between -200 200))
+                      :y (* 4 (math/rand-between -150 150))
+                      :scale scale
+                      :alpha 0.0))]
+      (macros/with-sprite-set canvas :stars
+        [sprs star-spr]
+        (doseq [s sprs] (resources/fadein s :duration 1.5))
+        (<! (events/wait-time 2000))
+        (doseq [s sprs] (resources/fadeout s :duration 1.5))
+        (<! (events/wait-time 1500))))
 
     (macros/with-sprite canvas :stars
       [spr (sprite/make-sprite
 
             (texture/sub-texture
              (resources/get-texture :stars :nearest)
-             [0 0] [8 8]
-             )
+             [0 0] [8 8])
+
             :scale [4 4]
             :alpha 0.0)]
 
       (<! (resources/fadein spr :duration 0.5))
       (<! (events/wait-time 2000))
-      (<! (resources/fadeout spr :duration 0.5))
-      )))
+      (<! (resources/fadeout spr :duration 0.5)))))
 
 
 (main)
