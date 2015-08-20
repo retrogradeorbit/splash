@@ -33,6 +33,14 @@
 )
 
 
+(def num-stars 50)
+(def stars-set (map (fn [n]
+                      (let [depth (math/rand-between 0 8)]
+                        {:x (math/rand-between 0 400)
+                         :y (math/rand-between 0 300)
+                         :z (+ depth (rand))
+                         :depth depth})) (range num-stars)))
+
 (defn main []
   (go
     (<! (resources/load-resources
