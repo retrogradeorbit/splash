@@ -19,7 +19,8 @@
    {:expand true
     :engine :auto
     :layers [:stars :ui]
-    :background 0x505050}))
+    :background 0x000000 ;0x505050
+    }))
 
 (defonce render-go-block (go (while true
                (<! (events/next-frame))
@@ -34,12 +35,14 @@
 
 
 (def num-stars 500)
-(def stars-set (map (fn [n]
-                      (let [depth (math/rand-between 0 8)]
-                        {:x (math/rand-between 0 400)
-                         :y (math/rand-between 0 300)
-                         :z (+ depth (rand))
-                         :depth depth})) (range num-stars)))
+(def stars-set (sort-by
+                :z
+                (map (fn [n]
+                       (let [depth (math/rand-between 0 8)]
+                         {:x (math/rand-between 0 400)
+                          :y (math/rand-between 0 300)
+                          :z (+ depth (rand))
+                          :depth depth})) (range num-stars))))
 
 (defn main []
   (go
@@ -61,40 +64,41 @@
 
     (let [scale [4 4]
           text (resources/get-texture :stars :nearest)
-          stars (for [[x y] [[0 0] [8 0] [16 0] ;[24 0]
-                             [0 8] [8 8] [16 8]
+          stars (for [[x y] [[16 8] [8 8] [16 0] [8 0] [0 0] ;[24 0]
+                             [0 8]
                              [0 16] [8 16] [24 24]]]
                   (texture/sub-texture text
-                                        [x y] [8 8]))
+                                       [x y] [8 8]))
           star-spr (for [{:keys [x y z depth]} stars-set]
-                      (sprite/make-sprite
-                         (nth stars depth)
-                         :x (* 4 x)
-                         :y (* 4 y)
-                         :scale scale
-                         :alpha 0.0))]
+                     (sprite/make-sprite
+                      (nth stars depth)
+                      :x (* 4 x)
+                      :y (* 4 y)
+                      :scale scale
+                      :alpha 0.0))]
       (macros/with-sprite-set canvas :stars
         [sprs star-spr]
         (doseq [s sprs] (resources/fadein s :duration 1.5))
 
-        (go (loop [n 1000 sts stars-set]
+        (go (loop [n 2000 c 0]
               (when (pos? n)
                 (<! (events/next-frame))
 
+                (doall
+                 (map
+                  (fn [{:keys [x y z] :as old} sprite]
+                    (sprite/set-pos! sprite
+                                     (* 4 (- (mod (- x (* 0.3 c z)) 400) 200))
+                                     (* 4 (- y 150))))
+                  stars-set
+                  star-spr))
+
                 (recur (dec n)
-                       (doall (map
-                               (fn [{:keys [x y z] :as old} sprite]
-                                 (sprite/set-pos! sprite
-                                                  (* 4 (- (mod (- x z) 400) 200))
-                                                  (* 4 (- y 150)))
-                                        ;(println old sprite)
-                                 (assoc old :x (- x z)))
-                               sts
-                               star-spr))
+                       (inc c)
                        ))))
 
 
-        (<! (events/wait-time 2000))
+        (<! (events/wait-time 15000))
 
 
         (doseq [s sprs] (resources/fadeout s :duration 10))
