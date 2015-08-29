@@ -16,6 +16,10 @@
 
 (enable-console-print!)
 
+;; makes fonts and text objects scale pixely (GL_NEAREST)
+;; looks better on oldschool games
+(set! (.-scaleModes.DEFAULT js/PIXI) (.-scaleModes.NEAREST js/PIXI))
+
 (defonce canvas
   (canv/init
    {:expand true
