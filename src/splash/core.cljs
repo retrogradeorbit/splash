@@ -43,13 +43,13 @@
 )
 
 
-(def num-stars 500)
+(def num-stars 250)
 (def stars-set (sort-by
                 :z
                 (map (fn [n]
                        (let [depth (math/rand-between 0 8)]
-                         {:x (math/rand-between 0 400)
-                          :y (math/rand-between 0 300)
+                         {:x (math/rand-between 0 2048)
+                          :y (math/rand-between 0 2048)
                           :z (+ depth (rand))
                           :depth depth})) (range num-stars))))
 
