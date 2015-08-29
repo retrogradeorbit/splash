@@ -4,7 +4,7 @@ My small demo-scene-esque splash page. Test out using infinitelives.pixi with fi
 
 Checkout how it looks here:
 
-    [www.procrustes.net](http://www.procrustes.net)
+[www.procrustes.net](http://www.procrustes.net)
 
 ## Overview
 
