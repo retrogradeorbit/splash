@@ -96,6 +96,8 @@
          :fade-in 0.2
          :fade-out 0.5))
 
+    (<! render!)
+
     (let [scale [4 4]
           text (resources/get-texture :stars :nearest)
           stars (for [[x y] [[16 8] [8 8] [16 0] [8 0] [0 0] ;[24 0]
