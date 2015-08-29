@@ -58,15 +58,16 @@
                                     "DUMMY"
                                     :weight 100
                                     :fill "#ffffff"))
-(defonce test-text (font/make-text "100 24px Indie Flower"
+(defonce test-text (font/make-text "500 24px Indie Flower"
                                     "-=retrogradeorbit=-\n"
-                                    :weight 100
-                                    :fill "#ff00ff"))
+                                    :weight 500
+                                    :fill "#ff00ff"
+                                    ;:stroke "#505050"
+                                    ;:strokeThickness 1
+                                    ))
 (defonce scroll-text
   (font/make-text "100 24px Indie Flower"
-                  ". .. ... This will eventually be the index page for my game jam submissions. \"Alien Forest Explorer\" from Global Game Jam, and \"Marty Funk\" and \"Monster Simulator?\" from ludum dare competitions. These HTML5 games were all developed with free and open source software on a linux platform. I use pixi.js as the underlying framework but target it through infinitelives.pixi using clojurescript. If you haven't tried clojure or clojurescript you should definitely try them. This of course wouldn't have been possible without the work of so many other people. Those involved in the creation of clojure and clojurescript, in pixi.js and in the many tools I use, like grafx2, impulse tracker and sfxr. Best wishes to everyone out there and enjoy! ...  .. .\n")
-
-)
+                  ". .. ... Old School Demo on a New School platform! This will eventually be the index page for my game jam submissions. \"Alien Forest Explorer\" from Global Game Jam 2015, and \"Marty Funk\" and \"Monster Simulator?\" from Ludum Dare 32 and 33. These HTML5 games were all developed with free and open source software on a linux platform. I use pixi.js as the underlying framework but target it through infinitelives.pixi using clojurescript. If you haven't tried clojure or clojurescript you should definitely try them. This of course wouldn't have been possible without the work of so many other people. Those involved in the creation of clojure and clojurescript, in pixi.js and in the many tools I use, like grafx2, impulse tracker and sfxr. A big shout out to the other farnarkler and to the Inversion crew. Best wishes to everyone out there and enjoy! ...  .. .\n"))
 
 ;;
 ;; font preloader channel
@@ -103,6 +104,13 @@ float hash2(vec2 uv) {
     return fract(sin(uv.x * 15.78 + uv.y * 35.14) * 43758.23);
 }
 
+vec3 hsv2rgb(vec3 c)
+{
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
 void main( void ) {
     vec4 col = texture2D(uSampler, vTextureCoord);
 
@@ -111,13 +119,18 @@ void main( void ) {
     float b=col.b;
 
     // magenta?
-    bool mag = ((r-b)<0.1) && r>0.1;
+    bool mag = ((r-b)<0.1) && r>0.1 && g<0.1;
 
     if(mag)
     {
          //gl_FragColor = vec4(vTextureCoord.x, vTextureCoord.y, 0.5, 1.0);
          float c = hash2(gl_FragCoord.xy * time);
-         gl_FragColor = vec4(c,c,c,1.0) * r;
+         gl_FragColor = vec4(hsv2rgb(vec3(4.0*vTextureCoord.y +
+                                     //(-2.0 * sin(0.04 * time)) +
+(-0.02 * time)
+,
+                                     1.0,
+                                     1.0)), 1.0) * r;
     }
     else
     {
@@ -130,7 +143,7 @@ void main( void ) {
     (go
       (loop [frame 0]
         (<! (events/next-frame))
-        (set! (.-uniforms.time.value f) (/ frame 1000))
+        (set! (.-uniforms.time.value f) (float frame))
         (recur (inc frame))))
     f))
 
@@ -161,7 +174,7 @@ void main( void ) {
     ;; bouncing name
     ;;
     (sprite/set-alpha! test-text 0.0)
-    (sprite/set-scale! test-text 6)
+    (sprite/set-scale! test-text 7)
     (set! (.-filters test-text) #js [(make-test)])
     (.addChild (-> canvas :layer :ui) test-text)
     (resources/fadein test-text :duration 5)
@@ -169,7 +182,8 @@ void main( void ) {
           (let [h (.-innerHeight js/window)
                 hh (/ h 2)
                 qh (/ h 4)]
-            (sprite/set-pos! test-text 0 (+ 200 (- (* 0.6 qh (Math/sin (* 0.04 n))) qh))
+            (sprite/set-pos! test-text 0 ;-200
+                                        (+ (* 0.5 qh) (- (* 0.1 qh (Math/sin (* 0.1 n))) qh))
                              ))
           (<! (events/next-frame))
           (recur (inc n))))
@@ -179,13 +193,13 @@ void main( void ) {
     ;;
     (sprite/set-scale! scroll-text 4)
     (.addChild (-> canvas :layer :ui) scroll-text)
-    (go (loop [n -3200]
+    (go (loop [n -3600]
           (let [h (.-innerHeight js/window)
                 hh (/ h 2)
                 qh (/ h 4)]
             (sprite/set-pos! scroll-text (* n -5) (- hh 80)))
           (<! (events/next-frame))
-          (recur (if (> n 3200) -3200 (inc n)))))
+          (recur (if (> n 3600) -3600 (inc n)))))
 
     ;;
     ;; parallax stars
