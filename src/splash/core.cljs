@@ -8,7 +8,8 @@
               [infinitelives.pixi.font :as font]
               [infinitelives.utils.math :as math]
               ;[splash.macros :refer-macros [ignore]]
-              [cljs.core.async :refer [<!]])
+              [cljs.core.async :refer [<!]]
+              [PIXI])
     (:require-macros [cljs.core.async.macros :refer [go]]
                      [splash.macros :as macros]
                      ))
