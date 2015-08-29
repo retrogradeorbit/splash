@@ -5,6 +5,7 @@
               [infinitelives.utils.events :as events]
               [infinitelives.utils.console :refer [log]]
               [infinitelives.pixi.texture :as texture]
+              [infinitelives.pixi.font :as font]
               [infinitelives.utils.math :as math]
               ;[splash.macros :refer-macros [ignore]]
               [cljs.core.async :refer [<!]])
