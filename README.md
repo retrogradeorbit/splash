@@ -2,11 +2,21 @@
 
 My small demo-scene-esque splash page. Test out using infinitelives.pixi with figwheel.
 
+Checkout how it looks here:
+
+    http://www.procrustes.net
+
 ## Overview
 
 My websites splash page. Idea is to make it a homage to 8-bit demoscene.
 
 ## Setup
+
+Install infinitelives.utils and infinitelives.pixi.
+
+Build assets
+
+    make sfx
 
 To get an interactive development environment run:
 
