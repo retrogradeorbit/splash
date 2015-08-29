@@ -109,6 +109,17 @@
             (sprite/set-pos! test-text 0 (+ 200 (- (* 0.6 qh (Math/sin (* 0.04 n))) qh))))
           (<! (events/next-frame))
           (recur (inc n))))
+
+    (sprite/set-scale! scroll-text 4)
+    (.addChild (-> canvas :layer :ui) scroll-text)
+    (go (loop [n -3200]
+          (let [h (.-innerHeight js/window)
+                hh (/ h 2)
+                qh (/ h 4)]
+            (sprite/set-pos! scroll-text (* n -5) (- hh 80)))
+          (<! (events/next-frame))
+          (recur (if (> n 3200) -3200 (inc n)))))
+
     (let [scale [4 4]
           text (resources/get-texture :stars :nearest)
           stars (for [[x y] [[16 8] [8 8] [16 0] [8 0] [0 0] ;[24 0]
