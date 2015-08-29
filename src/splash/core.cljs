@@ -169,7 +169,7 @@ void main( void ) {
     (<! render!)
 
     (go (let [tune (<! (sound/load-sound "/sfx/splash-screen.ogg"))
-              [source gain] (sound/play-sound tune 0.4 true)
+              [source gain] (sound/play-sound tune 0.7 true)
               ])
         )
 
