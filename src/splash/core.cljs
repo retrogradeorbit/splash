@@ -92,30 +92,42 @@
                       :alpha 0.0))]
       (macros/with-sprite-set canvas :stars
         [sprs star-spr]
-        (doseq [s sprs] (resources/fadein s :duration 1.5))
+        (doseq [s sprs] (resources/fadein s :duration 15))
 
         (go (loop [n 2000 c 0]
-              (when (pos? n)
+              (when true ;(pos? n)
                 (<! (events/next-frame))
 
-                (doall
-                 (map
-                  (fn [{:keys [x y z] :as old} sprite]
-                    (sprite/set-pos! sprite
-                                     (* 4 (- (mod (- x (* 0.3 c z)) 400) 200))
-                                     (* 4 (- y 150))))
-                  stars-set
-                  star-spr))
+                (let [w (.-innerWidth js/window)
+                      h (.-innerHeight js/window)
+                      hw (/ w 2)
+                      hh (/ h 2)
+                      speed -1]
+
+                  (doall
+                   (map
+                    (fn [{:keys [x y z] :as old} sprite]
+                      (sprite/set-pos! sprite
+                                       (- (mod (- (* 4 x) (* speed c z)) w) hw)
+                                       (- (mod (* 4 y) h) hh)))
+                    stars-set
+                    star-spr)))
 
                 (recur (dec n)
                        (inc c)
                        ))))
 
+        ;(macros/with-font )
+
+        ;; wait forever
+        (loop []
+          (<! (events/next-frame))
+          (recur))
 
         (<! (events/wait-time 15000))
 
 
-        (doseq [s sprs] (resources/fadeout s :duration 10))
+        ;(doseq [s sprs] (resources/fadeout s :duration 10))
         (<! (events/wait-time 15000))))
 
     (macros/with-sprite canvas :stars
