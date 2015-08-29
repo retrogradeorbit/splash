@@ -58,6 +58,26 @@
                                     "DUMMY"
                                     :weight 100
                                     :fill "#ffffff"))
+(defonce test-text (font/make-text "100 24px Indie Flower"
+                                    "-=retrogradeorbit=-\n"
+                                    :weight 100
+                                    :fill "#ff00ff"))
+(defonce scroll-text
+  (font/make-text "100 24px Indie Flower"
+                  ". .. ... This will eventually be the index page for my game jam submissions. \"Alien Forest Explorer\" from Global Game Jam, and \"Marty Funk\" and \"Monster Simulator?\" from ludum dare competitions. These HTML5 games were all developed with free and open source software on a linux platform. I use pixi.js as the underlying framework but target it through infinitelives.pixi using clojurescript. If you haven't tried clojure or clojurescript you should definitely try them. This of course wouldn't have been possible without the work of so many other people. Those involved in the creation of clojure and clojurescript, in pixi.js and in the many tools I use, like grafx2, impulse tracker and sfxr. Best wishes to everyone out there and enjoy! ...  .. .\n")
+
+)
+
+(defonce render! (go
+                   (<! (events/wait-time 1500))
+                   (sprite/set-pos! dummy-text -100000 -10000)
+                   (sprite/set-pos! test-text 0 0)
+                   (.addChild (-> canvas :layer :ui) dummy-text)
+                   (<! (events/next-frame))
+                   (.removeChild (-> canvas :layer :ui) dummy-text)
+                   (<! (events/next-frame))))
+
+
 (defn main []
   (go
     (<! (resources/load-resources
