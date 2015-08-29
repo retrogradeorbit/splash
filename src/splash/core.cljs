@@ -167,11 +167,16 @@ void main( void ) {
     ;; wait for fonts to be ready
     (<! render!)
 
+    (go (let [tune (<! (sound/load-sound "/sfx/splash-screen.ogg"))
+              [source gain] (sound/play-sound tune 0.4 true)
+              ])
+        )
+
     ;;
     ;; bouncing name
     ;;
     (sprite/set-alpha! test-text 0.0)
-    (sprite/set-scale! test-text 7)
+    (sprite/set-scale! test-text 6)
     (set! (.-filters test-text) #js [(make-test)])
     (.addChild (-> canvas :layer :ui) test-text)
     (resources/fadein test-text :duration 5)
@@ -188,15 +193,24 @@ void main( void ) {
     ;;
     ;; scrolling message
     ;;
-    (sprite/set-scale! scroll-text 4)
-    (.addChild (-> canvas :layer :ui) scroll-text)
-    (go (loop [n -3600]
-          (let [h (.-innerHeight js/window)
-                hh (/ h 2)
-                qh (/ h 4)]
-            (sprite/set-pos! scroll-text (* n -5) (- hh 80)))
-          (<! (events/next-frame))
-          (recur (if (> n 3600) -3600 (inc n)))))
+    (go
+      (sprite/set-scale! scroll-text 4)
+      (.addChild (-> canvas :layer :ui) scroll-text)
+      (sprite/set-pos! scroll-text 10000 10000)
+
+      ;; we have to wait a frame or the font is wrong? huh?
+      (<! (events/next-frame))
+      (let [w (.-width scroll-text)
+            hw (/ w 2 5)
+            buff 300
+            off (+ hw buff)]
+        (go (loop [n (- off)]
+              (let [h (.-innerHeight js/window)
+                    hh (/ h 2)
+                    qh (/ h 4)]
+                (sprite/set-pos! scroll-text (* n -5) (- hh 80)))
+              (<! (events/next-frame))
+              (recur (if (> n off) (- off) (inc n)))))))
 
     ;;
     ;; parallax stars
