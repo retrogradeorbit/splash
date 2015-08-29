@@ -86,9 +86,6 @@
 ;; experimental shaders
 ;;
 
-#_ (deftype TestFilter [passes shaders dirty padding uniforms fragmentSrc]
-  PIXI/AbstractFilter)
-
 (defn make-test []
   (let [f
         (PIXI/AbstractFilter.
