@@ -68,6 +68,9 @@
 
 )
 
+;;
+;; font preloader channel
+;;
 (defonce render! (go
                    (<! (events/wait-time 1500))
                    (sprite/set-pos! dummy-text -100000 -10000)
@@ -78,8 +81,63 @@
                    (<! (events/next-frame))))
 
 
+;;
+;; experimental shaders
+;;
+
+#_ (deftype TestFilter [passes shaders dirty padding uniforms fragmentSrc]
+  PIXI/AbstractFilter)
+
+(defn make-test []
+  (let [f
+        (PIXI/AbstractFilter.
+         #js [
+              "
+precision mediump float;
+varying vec2 vTextureCoord;
+varying vec4 vColor;
+uniform sampler2D uSampler;
+uniform float time;
+
+float hash2(vec2 uv) {
+    return fract(sin(uv.x * 15.78 + uv.y * 35.14) * 43758.23);
+}
+
+void main( void ) {
+    vec4 col = texture2D(uSampler, vTextureCoord);
+
+    float r=col.r;
+    float g=col.g;
+    float b=col.b;
+
+    // magenta?
+    bool mag = ((r-b)<0.1) && r>0.1;
+
+    if(mag)
+    {
+         //gl_FragColor = vec4(vTextureCoord.x, vTextureCoord.y, 0.5, 1.0);
+         float c = hash2(gl_FragCoord.xy * time);
+         gl_FragColor = vec4(c,c,c,1.0) * r;
+    }
+    else
+    {
+        //gl_FragColor = vec4(hash2(gl_FragCoord.xy * time), time, 0.0, 0.3);
+        gl_FragColor = col; //vec4(0.0,0.0,0.0,0.0);
+    }
+}
+"]
+         #js {"time" #js {"type" "1f" "value" 0.0}})]
+    (go
+      (loop [frame 0]
+        (<! (events/next-frame))
+        (set! (.-uniforms.time.value f) (/ frame 1000))
+        (recur (inc frame))))
+    f))
+
+
 (defn main []
   (go
+    ;; load assets with loader bar
     (<! (resources/load-resources
          (-> canvas :layer :ui)
          [
@@ -96,20 +154,29 @@
          :fade-in 0.2
          :fade-out 0.5))
 
+    ;; wait for fonts to be ready
     (<! render!)
 
+    ;;
+    ;; bouncing name
+    ;;
     (sprite/set-alpha! test-text 0.0)
     (sprite/set-scale! test-text 6)
+    (set! (.-filters test-text) #js [(make-test)])
     (.addChild (-> canvas :layer :ui) test-text)
     (resources/fadein test-text :duration 5)
     (go (loop [n 0]
           (let [h (.-innerHeight js/window)
                 hh (/ h 2)
                 qh (/ h 4)]
-            (sprite/set-pos! test-text 0 (+ 200 (- (* 0.6 qh (Math/sin (* 0.04 n))) qh))))
+            (sprite/set-pos! test-text 0 (+ 200 (- (* 0.6 qh (Math/sin (* 0.04 n))) qh))
+                             ))
           (<! (events/next-frame))
           (recur (inc n))))
 
+    ;;
+    ;; scrolling message
+    ;;
     (sprite/set-scale! scroll-text 4)
     (.addChild (-> canvas :layer :ui) scroll-text)
     (go (loop [n -3200]
@@ -120,6 +187,9 @@
           (<! (events/next-frame))
           (recur (if (> n 3200) -3200 (inc n)))))
 
+    ;;
+    ;; parallax stars
+    ;;
     (let [scale [4 4]
           text (resources/get-texture :stars :nearest)
           stars (for [[x y] [[16 8] [8 8] [16 0] [8 0] [0 0] ;[24 0]
@@ -161,32 +231,9 @@
                        (inc c)
                        ))))
 
-        ;(macros/with-font )
-
         ;; wait forever
         (loop []
           (<! (events/next-frame))
-          (recur))
-
-        (<! (events/wait-time 15000))
-
-
-        ;(doseq [s sprs] (resources/fadeout s :duration 10))
-        (<! (events/wait-time 15000))))
-
-    (macros/with-sprite canvas :stars
-      [spr (sprite/make-sprite
-
-            (texture/sub-texture
-             (resources/get-texture :stars :nearest)
-             [0 0] [8 8])
-
-            :scale [4 4]
-            :alpha 0.0)]
-
-      (<! (resources/fadein spr :duration 0.5))
-      (<! (events/wait-time 2000))
-      (<! (resources/fadeout spr :duration 0.5)))))
-
+          (recur))))))
 
 (main)
