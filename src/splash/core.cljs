@@ -151,8 +151,8 @@ void main( void ) {
     (<! (resources/load-resources
          (-> canvas :layer :ui)
          [
+          "sfx/splash-screen.ogg"
           "img/stars.png"
-          "http://www.goodboydigital.com/pixijs/examples/1/bunny.png"
           ]
          :full-colour 0x302060
          :highlight 0x8080ff
