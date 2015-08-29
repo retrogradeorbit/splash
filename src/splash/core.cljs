@@ -33,6 +33,9 @@
                ;(log "frame")
                ((:render-fn canvas)))))
 
+(defonce fonts
+  [(font/install-google-font-stylesheet! "http://fonts.googleapis.com/css?family=Indie+Flower")])
+
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
@@ -50,6 +53,11 @@
                           :z (+ depth (rand))
                           :depth depth})) (range num-stars))))
 
+(defonce font-inconsolata (font/make-tiled-font "Indie Flower" 100 10))
+(defonce dummy-text (font/make-text "100 10px Indie Flower"
+                                    "DUMMY"
+                                    :weight 100
+                                    :fill "#ffffff"))
 (defn main []
   (go
     (<! (resources/load-resources
