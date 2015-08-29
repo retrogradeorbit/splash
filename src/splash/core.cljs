@@ -98,6 +98,17 @@
 
     (<! render!)
 
+    (sprite/set-alpha! test-text 0.0)
+    (sprite/set-scale! test-text 6)
+    (.addChild (-> canvas :layer :ui) test-text)
+    (resources/fadein test-text :duration 5)
+    (go (loop [n 0]
+          (let [h (.-innerHeight js/window)
+                hh (/ h 2)
+                qh (/ h 4)]
+            (sprite/set-pos! test-text 0 (+ 200 (- (* 0.6 qh (Math/sin (* 0.04 n))) qh))))
+          (<! (events/next-frame))
+          (recur (inc n))))
     (let [scale [4 4]
           text (resources/get-texture :stars :nearest)
           stars (for [[x y] [[16 8] [8 8] [16 0] [8 0] [0 0] ;[24 0]
