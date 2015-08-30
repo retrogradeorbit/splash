@@ -98,10 +98,7 @@ varying vec4 vColor;
 uniform sampler2D uSampler;
 uniform float time;
 
-float hash2(vec2 uv) {
-    return fract(sin(uv.x * 15.78 + uv.y * 35.14) * 43758.23);
-}
-
+// hue,saturation,value -> red,green,blue
 vec3 hsv2rgb(vec3 c)
 {
     vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
@@ -109,6 +106,7 @@ vec3 hsv2rgb(vec3 c)
     return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
+// shader mainline
 void main( void ) {
     vec4 col = texture2D(uSampler, vTextureCoord);
 
