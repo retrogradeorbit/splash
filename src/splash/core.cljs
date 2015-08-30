@@ -116,24 +116,21 @@ void main( void ) {
     float g=col.g;
     float b=col.b;
 
-    // magenta?
+    // is our hue magenta?
     bool mag = ((r-b)<0.1) && r>0.1 && g<0.1;
 
     if(mag)
     {
-         //gl_FragColor = vec4(vTextureCoord.x, vTextureCoord.y, 0.5, 1.0);
-         float c = hash2(gl_FragCoord.xy * time);
-         gl_FragColor = vec4(hsv2rgb(vec3(4.0*vTextureCoord.y +
-                                     //(-2.0 * sin(0.04 * time)) +
-(-0.02 * time)
-,
-                                     1.0,
-                                     1.0)), 1.0) * r;
+         gl_FragColor = vec4(
+             hsv2rgb(
+                 vec3(4.0 * vTextureCoord.y + (-0.02 * time),
+                      1.0,
+                      1.0)),
+             1.0) * r;
     }
     else
     {
-        //gl_FragColor = vec4(hash2(gl_FragCoord.xy * time), time, 0.0, 0.3);
-        gl_FragColor = col; //vec4(0.0,0.0,0.0,0.0);
+        gl_FragColor = col;
     }
 }
 "]
