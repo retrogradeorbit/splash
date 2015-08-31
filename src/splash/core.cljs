@@ -177,6 +177,7 @@ void main( void ) {
          [
           "sfx/splash-screen.ogg"
           "img/stars.png"
+          "http://fonts.gstatic.com/s/indieflower/v8/10JVD_humAd5zP2yrFqw6ugdm0LZdjqr5-oayXSOefg.woff2"
           ]
          :full-colour 0x302060
          :highlight 0x8080ff
