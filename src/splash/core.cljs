@@ -140,6 +140,34 @@ void main( void ) {
         (recur (inc frame))))
     f))
 
+(defn make-bounce []
+  (let [f
+        (PIXI/AbstractFilter.
+         #js [
+              "
+precision mediump float;
+varying vec2 vTextureCoord;
+varying vec4 vColor;
+uniform sampler2D uSampler;
+uniform float time;
+
+// shader mainline
+void main( void ) {
+    float x=vTextureCoord.x;
+    float y=vTextureCoord.y;
+    vec4 col = texture2D(uSampler, vec2(x,y-0.05*(sin(0.07*time+10.0*x))));
+
+    gl_FragColor = col;
+}
+"]
+         #js {"time" #js {"type" "1f" "value" 0.0}})]
+    (go
+      (loop [frame 0]
+        (<! (events/next-frame))
+        (set! (.-uniforms.time.value f) (float frame))
+        (recur (inc frame))))
+    f))
+
 
 (defn main []
   (go
