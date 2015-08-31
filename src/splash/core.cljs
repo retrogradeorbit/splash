@@ -210,7 +210,7 @@ void main( void ) {
                 hh (/ h 2)
                 qh (/ h 4)]
             (sprite/set-pos! test-text 0 ;-200
-                                        (+ (* 0.5 qh) (- (* 0.1 qh (Math/sin (* 0.1 n))) qh))
+                             (+ (* 0.5 qh) (- (* 0.1 qh (Math/sin (* 0.1 n))) qh))
                              ))
           (<! (events/next-frame))
           (recur (inc n))))
@@ -263,7 +263,7 @@ void main( void ) {
         (doseq [s sprs] (resources/fadein s :duration 15))
 
         (go (loop [n 2000 c 0]
-              (when true ;(pos? n)
+              (when true                ;(pos? n)
                 (<! (events/next-frame))
 
                 (let [w (.-innerWidth js/window)
