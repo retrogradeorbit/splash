@@ -219,6 +219,8 @@ void main( void ) {
     ;;
     (go
       (sprite/set-scale! scroll-text 4)
+      (set! (.-filters scroll-text) #js [(make-bounce)])
+
       (.addChild (-> canvas :layer :ui) scroll-text)
       (sprite/set-pos! scroll-text 10000 10000)
 
@@ -230,9 +232,11 @@ void main( void ) {
             off (+ hw buff)]
         (go (loop [n (- off)]
               (let [h (.-innerHeight js/window)
+                    win-w (.-innerWidth js/window)
                     hh (/ h 2)
                     qh (/ h 4)]
-                (sprite/set-pos! scroll-text (* n -5) (- hh 80)))
+                (set! (.-filterArea scroll-text) (PIXI/Rectangle. 0 hh win-w h))
+                (sprite/set-pos! scroll-text (* n -5) (- hh 120)))
               (<! (events/next-frame))
               (recur (if (> n off) (- off) (inc n)))))))
 
