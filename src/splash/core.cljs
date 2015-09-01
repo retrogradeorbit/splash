@@ -261,10 +261,10 @@ void main( void ) {
                       :x (* 4 x)
                       :y (* 4 y)
                       :scale scale
-                      :alpha 0.0))]
+                      :alpha 1.0))]
       (macros/with-sprite-set canvas :stars
         [sprs star-spr]
-        (doseq [s sprs] (resources/fadein s :duration 15))
+        ;(doseq [s sprs] (resources/fadein s :duration 15))
 
         (go (loop [n 2000 c 0]
               (when true                ;(pos? n)
