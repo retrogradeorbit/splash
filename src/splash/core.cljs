@@ -155,7 +155,11 @@ uniform float time;
 void main( void ) {
     float x=vTextureCoord.x;
     float y=vTextureCoord.y;
-    vec4 col = texture2D(uSampler, vec2(x,y-0.05*(sin(0.07*time+10.0*x))));
+    vec4 col = texture2D(uSampler,
+                         vec2(x,
+                              y - 0.05 * sin(0.1 * time + 10.0 * x))
+                         //vec2(x,y)
+                         );
 
     gl_FragColor = col;
 }
