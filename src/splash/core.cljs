@@ -68,7 +68,7 @@
                                     ))
 (defonce scroll-text
   (font/make-text "100 24px Indie Flower"
-                  ". .. ... Old School Demo on a New School platform??! This is Crispin, here, paying homage to the 8-bit and 16-bit wonderboxes of our childhoods. Commodore lives! All music, graphics and code in this homage by me! This will eventually be the index page for my game jam submissions. \"Alien Forest Explorer\" from Global Game Jam 2015, and \"Marty Funk\" and \"Monster Simulator?\" from Ludum Dare 32 and 33. These HTML5 games were all developed with free and open source software on a linux platform. I use pixi.js as the underlying framework but target it through infinitelives.pixi using clojurescript. If you haven't tried clojure or clojurescript you should definitely try them. This of course wouldn't have been possible without the work of so many other amazing people. Those involved in the creation of clojure and clojurescript, in pixi.js and in the many tools I use, like grafx2, OpenMPT and sfxr. A big shout out to Team Farnarkle and to the Inversion crew. Best wishes to everyone out there and enjoy the games! ...  .. .\n"))
+                  "Old School Demo on a New School platform??! Crispin, here, paying homage to the 8-bit and 16-bit wonderboxes of our childhood. Commodore lives! A big shout out to Team Farnarkle and to the Inversion crew. Best wishes to everyone out there and enjoy the games!\n"))
 
 ;;
 ;; font preloader channel
