@@ -206,6 +206,33 @@ void main( void ) {
               ])
         )
 
+
+    (go
+      (loop [n 1000]
+        (when (pos? n)
+          (<! (events/next-frame))
+          (recur (dec n))))
+      (let [left-arrow (font/make-text "100 48px Indie Flower" left)
+              right-arrow (font/make-text "100 48px Indie Flower" right)]
+
+          ;;
+          ;; arrows
+          ;;
+          (sprite/set-pos! left-arrow -200 0.0)
+          (sprite/set-pos! right-arrow 200 0.0)
+          (sprite/set-scale! left-arrow 2)
+          (sprite/set-scale! right-arrow 2)
+          (.addChild (-> canvas :layer :ui) left-arrow)
+          (.addChild (-> canvas :layer :ui) right-arrow)
+          (go (loop [n 0]
+                (let [w (.-innerWidth js/window)
+                      hw (/ w 2)
+                      x (* 0.9 hw)]
+                  (sprite/set-pos! left-arrow (- x) 0)
+                  (sprite/set-pos! right-arrow x 0)
+                  (<! (events/next-frame))
+                  (recur (inc n)))))))
+
     ;;
     ;; bouncing name
     ;;
