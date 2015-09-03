@@ -66,6 +66,11 @@
                                     ;:stroke "#505050"
                                     ;:strokeThickness 1
                                     ))
+
+(def left "←")
+(def right "→")
+
+
 (defonce scroll-text
   (font/make-text "100 24px Indie Flower"
                   "Old School Demo on a New School platform??! Crispin, here, paying homage to the 8-bit and 16-bit wonderboxes of our childhood. Commodore lives! A big shout out to Team Farnarkle and to the Inversion crew. Best wishes to everyone out there and enjoy the games!\n"))
