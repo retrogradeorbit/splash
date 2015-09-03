@@ -246,7 +246,7 @@ void main( void ) {
                 hh (/ h 2)
                 qh (/ h 4)]
             (sprite/set-pos! test-text 0 ;-200
-                             (+ (* 0.5 qh) (- (* 0.1 qh (Math/sin (* 0.1 n))) qh))
+                             (+ 80 (- (* 0.1 qh (Math/sin (* 0.1 n))) qh))
                              ))
           (<! (events/next-frame))
           (recur (inc n))))
@@ -273,7 +273,7 @@ void main( void ) {
                     hh (/ h 2)
                     qh (/ h 4)]
                 (set! (.-filterArea scroll-text) (PIXI/Rectangle. 0 hh win-w h))
-                (sprite/set-pos! scroll-text (* n -5) (- hh 120)))
+                (sprite/set-pos! scroll-text (* n -5) (- hh 40)))
               (<! (events/next-frame))
               (recur (if (> n off) (- off) (inc n)))))))
 
