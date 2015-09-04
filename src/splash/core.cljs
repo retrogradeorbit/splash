@@ -208,7 +208,7 @@ void main( void ) {
 
 
     (go
-      (loop [n 1000]
+      #_ (loop [n 1]
         (when (pos? n)
           (<! (events/next-frame))
           (recur (dec n))))
