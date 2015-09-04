@@ -67,8 +67,8 @@
                                     ;:strokeThickness 1
                                     ))
 
-(def left "←")
-(def right "→")
+(defonce left "←")
+(defonce right "→")
 
 
 (defonce scroll-text
@@ -79,7 +79,7 @@
 ;; font preloader channel
 ;;
 (defonce render! (go
-                   (<! (events/wait-time 2000))
+                   (<! (events/wait-time 1000))
                    (sprite/set-pos! dummy-text -100000 -10000)
                    (sprite/set-pos! test-text 0 0)
                    (.addChild (-> canvas :layer :ui) dummy-text)
@@ -222,6 +222,8 @@ void main( void ) {
           (sprite/set-pos! right-arrow 200 0.0)
           (sprite/set-scale! left-arrow 2)
           (sprite/set-scale! right-arrow 2)
+          (sprite/set-alpha! left-arrow 0.5)
+          (sprite/set-alpha! right-arrow 0.5)
           (.addChild (-> canvas :layer :ui) left-arrow)
           (.addChild (-> canvas :layer :ui) right-arrow)
           (go (loop [n 0]
