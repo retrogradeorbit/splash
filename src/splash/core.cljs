@@ -58,10 +58,10 @@
                           :depth depth})) (range num-stars))))
 
 (defonce font-inconsolata (font/make-tiled-font "Indie Flower" 100 10))
-(defonce dummy-text (font/make-text "100 10px Indie Flower"
-                                    "DUMMY"
-                                    :weight 100
-                                    :fill "#ffffff"))
+;; (defonce dummy-text (font/make-text "100 10px Indie Flower"
+;;                                     "DUMMY"
+;;                                     :weight 100
+;;                                     :fill "#ffffff"))
 (defonce test-text (font/make-text "500 24px Indie Flower"
                                     "-=retrogradeorbit=-\n"
                                     :weight 500
@@ -82,12 +82,12 @@
 ;; font preloader channel
 ;;
 (defonce render! (go
-                   (<! (events/wait-time 1000))
-                   (sprite/set-pos! dummy-text -100000 -10000)
+                   ;(<! (events/wait-time 100))
+                   ;(sprite/set-pos! dummy-text -100000 -10000)
                    (sprite/set-pos! test-text 0 0)
-                   (.addChild (-> canvas :layer :ui) dummy-text)
-                   (<! (events/next-frame))
-                   (.removeChild (-> canvas :layer :ui) dummy-text)
+                   ;(.addChild (-> canvas :layer :ui) dummy-text)
+                   ;(<! (events/next-frame))
+                   ;(.removeChild (-> canvas :layer :ui) dummy-text)
                    (<! (events/next-frame))))
 
 
