@@ -81,49 +81,42 @@
          :fade-in 0.2
          :fade-out 0.5))
 
-    ;; wait for fonts to be ready
-    (<! render!)
-
+    ;;
+    ;; play music on a loop
+    ;;
     (go (let [tune (<! (sound/load-sound "/sfx/splash-screen.ogg"))
               [source gain] (sound/play-sound tune 0.7 true)
               ])
         )
 
-
-    (go
-      #_ (loop [n 1]
-        (when (pos? n)
-          (<! (events/next-frame))
-          (recur (dec n))))
-      (let [left-arrow (font/make-text "100 48px Indie Flower" left)
-              right-arrow (font/make-text "100 48px Indie Flower" right)]
-
-          ;;
-          ;; arrows
-          ;;
-          (sprite/set-pos! left-arrow -200 0.0)
-          (sprite/set-pos! right-arrow 200 0.0)
-          (sprite/set-scale! left-arrow 2)
-          (sprite/set-scale! right-arrow 2)
-          (sprite/set-alpha! left-arrow 0.5)
-          (sprite/set-alpha! right-arrow 0.5)
-          (.addChild (-> canvas :layer :ui) left-arrow)
-          (.addChild (-> canvas :layer :ui) right-arrow)
-          (go (loop [n 0]
-                (let [w (.-innerWidth js/window)
-                      hw (/ w 2)
-                      x (* 0.9 hw)]
-                  (sprite/set-pos! left-arrow (- x) 0)
-                  (sprite/set-pos! right-arrow x 0)
-                  (<! (events/next-frame))
-                  (recur (inc n)))))))
+    ;;
+    ;; arrows
+    ;;
+    (let [left-arrow (font/make-text "100 48px Indie Flower" left)
+          right-arrow (font/make-text "100 48px Indie Flower" right)]
+      (sprite/set-pos! left-arrow -200 0.0)
+      (sprite/set-pos! right-arrow 200 0.0)
+      (sprite/set-scale! left-arrow 2)
+      (sprite/set-scale! right-arrow 2)
+      (sprite/set-alpha! left-arrow 0.5)
+      (sprite/set-alpha! right-arrow 0.5)
+      (.addChild (-> canvas :layer :ui) left-arrow)
+      (.addChild (-> canvas :layer :ui) right-arrow)
+      (go (loop [n 0]
+            (let [w (.-innerWidth js/window)
+                  hw (/ w 2)
+                  x (* 0.9 hw)]
+              (sprite/set-pos! left-arrow (- x) 0)
+              (sprite/set-pos! right-arrow x 0)
+              (<! (events/next-frame))
+              (recur (inc n))))))
 
     ;;
     ;; bouncing name
     ;;
     (sprite/set-alpha! test-text 0.0)
     (sprite/set-scale! test-text 6)
-    (set! (.-filters test-text) #js [(make-test)])
+    (set! (.-filters test-text) #js [(shaders/make-colour-bars)])
     (.addChild (-> canvas :layer :ui) test-text)
     (resources/fadein test-text :duration 5)
     (go (loop [n 0]
@@ -141,7 +134,7 @@
     ;;
     (go
       (sprite/set-scale! scroll-text 4)
-      (set! (.-filters scroll-text) #js [(make-bounce)])
+      (set! (.-filters scroll-text) #js [(shaders/make-wavy)])
 
       (.addChild (-> canvas :layer :ui) scroll-text)
       (sprite/set-pos! scroll-text 10000 10000)

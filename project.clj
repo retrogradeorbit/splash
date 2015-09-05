@@ -44,7 +44,7 @@
               :source-paths ["src"]
               :compiler {:output-to "resources/public/js/compiled/splash.js"
                          :main splash.core
-                         :optimizations :advanced
+                         :optimizations :whitespace ;:advanced
                          :pretty-print false
 
                          ;; pixi uses techniques incompatible with
