@@ -64,19 +64,6 @@
                   "Old School Demo on a New School platform??! Crispin, here, paying homage to the 8-bit and 16-bit wonderboxes of our childhood. Commodore lives! A big shout out to Team Farnarkle and to the Inversion crew. Best wishes to everyone out there and enjoy the games!\n"))
 
 ;;
-;; font preloader channel
-;;
-(defonce render! (go
-                   ;(<! (events/wait-time 100))
-                   ;(sprite/set-pos! dummy-text -100000 -10000)
-                   (sprite/set-pos! test-text 0 0)
-                   ;(.addChild (-> canvas :layer :ui) dummy-text)
-                   ;(<! (events/next-frame))
-                   ;(.removeChild (-> canvas :layer :ui) dummy-text)
-                   (<! (events/next-frame))))
-
-
-;;
 ;; experimental shaders
 ;;
 
