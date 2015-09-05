@@ -47,10 +47,6 @@
                           :depth depth})) (range num-stars))))
 
 (defonce font-inconsolata (font/make-tiled-font "Indie Flower" 100 10))
-;; (defonce dummy-text (font/make-text "100 10px Indie Flower"
-;;                                     "DUMMY"
-;;                                     :weight 100
-;;                                     :fill "#ffffff"))
 (defonce test-text (font/make-text "500 24px Indie Flower"
                                     "-=retrogradeorbit=-\n"
                                     :weight 500
