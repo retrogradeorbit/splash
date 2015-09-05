@@ -31,7 +31,6 @@
 
 (defonce render-go-block (go (while true
                (<! (events/next-frame))
-               ;(log "frame")
                ((:render-fn canvas)))))
 
 (defonce load-fonts (font/google ["Indie Flower"]))
@@ -113,7 +112,7 @@
     ;; bouncing name
     ;;
     (sprite/set-alpha! test-text 0.0)
-    (sprite/set-scale! test-text 6)
+    (sprite/set-scale! test-text 5)
     (set! (.-filters test-text) #js [(shaders/make-colour-bars)])
     (.addChild (-> canvas :layer :ui) test-text)
     (resources/fadein test-text :duration 5)
@@ -122,7 +121,7 @@
                 hh (/ h 2)
                 qh (/ h 4)]
             (sprite/set-pos! test-text 0 ;-200
-                             (+ 80 (- (* 0.1 qh (Math/sin (* 0.1 n))) qh))
+                             (+ 0 (- (* 0.1 qh (Math/sin (* 0.1 n))) qh))
                              ))
           (<! (events/next-frame))
           (recur (inc n))))
@@ -172,24 +171,24 @@
                       :alpha 1.0))]
       (macros/with-sprite-set canvas :stars
         [sprs star-spr]
-        (go (loop [c 0]
-              (<! (events/next-frame))
+        (loop [c 0]
+          (<! (events/next-frame))
 
-              (let [w (.-innerWidth js/window)
-                    h (.-innerHeight js/window)
-                    hw (/ w 2)
-                    hh (/ h 2)
-                    speed -1]
+          (let [w (.-innerWidth js/window)
+                h (.-innerHeight js/window)
+                hw (/ w 2)
+                hh (/ h 2)
+                speed -1]
 
-                (doall
-                 (map
-                  (fn [{:keys [x y z] :as old} sprite]
-                    (sprite/set-pos! sprite
-                                     (- (mod (- (* 4 x) (* speed c z)) w) hw)
-                                     (- (mod (* 4 y) h) hh)))
-                  stars-set
-                  star-spr)))
+            (doall
+             (map
+              (fn [{:keys [x y z] :as old} sprite]
+                (sprite/set-pos! sprite
+                                 (- (mod (- (* 4 x) (* speed c z)) w) hw)
+                                 (- (mod (* 4 y) h) hh)))
+              stars-set
+              star-spr)))
 
-              (recur (inc c))))))))
+          (recur (inc c)))))))
 
 (main)
