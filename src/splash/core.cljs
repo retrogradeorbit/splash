@@ -144,8 +144,6 @@
       (.addChild (-> canvas :layer :ui) scroll-text)
       (sprite/set-pos! scroll-text 10000 10000)
 
-      ;; we have to wait a frame or the font is wrong? huh?
-      (<! (events/next-frame))
       (let [w (.-width scroll-text)
             hw (/ w 2 5)
             buff 300
