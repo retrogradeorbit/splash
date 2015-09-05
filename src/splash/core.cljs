@@ -8,6 +8,7 @@
               [infinitelives.pixi.font :as font]
               [infinitelives.utils.math :as math]
               [infinitelives.utils.sound :as sound]
+              [infinitelives.utils.dom :as dom]
               [splash.shaders :as shaders]
               [cljs.core.async :refer [<!]]
               [PIXI])
@@ -20,6 +21,13 @@
 ;; makes fonts and text objects scale pixely (GL_NEAREST)
 ;; looks better on oldschool games
 (set! (.-scaleModes.DEFAULT js/PIXI) (.-scaleModes.NEAREST js/PIXI))
+
+;; remove spinner div
+(go
+  (<! (events/next-frame))
+  (let [div (aget (.getElementsByTagName js/document "div") 0)]
+    (.log js/console div)
+    (dom/remove! js/document.body div)))
 
 (defonce canvas
   (canv/init
