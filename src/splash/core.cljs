@@ -85,9 +85,7 @@
     ;; play music on a loop
     ;;
     (go (let [tune (<! (sound/load-sound "/sfx/splash-screen.ogg"))
-              [source gain] (sound/play-sound tune 0.7 true)
-              ])
-        )
+              [source gain] (sound/play-sound tune 0.7 true)]))
 
     ;;
     ;; arrows
@@ -174,34 +172,24 @@
                       :alpha 1.0))]
       (macros/with-sprite-set canvas :stars
         [sprs star-spr]
-        ;(doseq [s sprs] (resources/fadein s :duration 15))
+        (go (loop [c 0]
+              (<! (events/next-frame))
 
-        (go (loop [n 2000 c 0]
-              (when true                ;(pos? n)
-                (<! (events/next-frame))
+              (let [w (.-innerWidth js/window)
+                    h (.-innerHeight js/window)
+                    hw (/ w 2)
+                    hh (/ h 2)
+                    speed -1]
 
-                (let [w (.-innerWidth js/window)
-                      h (.-innerHeight js/window)
-                      hw (/ w 2)
-                      hh (/ h 2)
-                      speed -1]
+                (doall
+                 (map
+                  (fn [{:keys [x y z] :as old} sprite]
+                    (sprite/set-pos! sprite
+                                     (- (mod (- (* 4 x) (* speed c z)) w) hw)
+                                     (- (mod (* 4 y) h) hh)))
+                  stars-set
+                  star-spr)))
 
-                  (doall
-                   (map
-                    (fn [{:keys [x y z] :as old} sprite]
-                      (sprite/set-pos! sprite
-                                       (- (mod (- (* 4 x) (* speed c z)) w) hw)
-                                       (- (mod (* 4 y) h) hh)))
-                    stars-set
-                    star-spr)))
-
-                (recur (dec n)
-                       (inc c)
-                       ))))
-
-        ;; wait forever
-        (loop []
-          (<! (events/next-frame))
-          (recur))))))
+              (recur (inc c))))))))
 
 (main)
