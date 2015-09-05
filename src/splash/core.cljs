@@ -35,7 +35,10 @@
                ((:render-fn canvas)))))
 
 (defonce fonts
-  [(font/install-google-font-stylesheet! "http://fonts.googleapis.com/css?family=Indie+Flower")])
+  [
+   (font/install-google-font-stylesheet! "http://fonts.googleapis.com/css?family=Indie+Flower")
+   (font/install-google-font-dom-anchor! "Indie Flower")
+   ])
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
