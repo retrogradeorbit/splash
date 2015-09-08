@@ -68,6 +68,20 @@
   (font/make-text "100 24px Indie Flower"
                   "Old School Demo on a New School platform??! Crispin, here, paying homage to the 8-bit and 16-bit wonderboxes of our childhood. Commodore lives! A big shout out to Team Farnarkle and to the Inversion crew. Best wishes to everyone out there and enjoy the games!\n"))
 
+(def menu
+  [
+   {:title "Alien Forest Explorer"
+    :date "Global Game Jam, Feb 2015"
+    :desc "You are an alien away team of one, sent on a reconnosaince mission to recover a stranded alien new born. Your captain, Rex, is there to talk you through the adventure and help you find poor Ruddiger. Unique graphical style makes this one a visual treat, but a bit of a stomach churner."
+    :url "http://forest.procrustes.net"}
+   {:title "Marty Funk"
+    :date "Ludum Dare 32 Jam, April 2015"
+    :desc "The townsfolk grow angry, and you as the only man of cloth, must soothe their strained nerves by chanting to them. You can fly around by using the great trouser-breath yoga to help get in ear shot. But don't get hit by stones. The years of sitting have made you frail and weak."
+    :url "http://marty-funk.procrustes.net"}
+])
+
+(def selected (atom 0))
+
 (defn main []
   (go
     ;; load assets with loader bar
